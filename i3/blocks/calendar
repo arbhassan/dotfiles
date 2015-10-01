@@ -1,0 +1,7 @@
+#!/bin/bash
+
+date '+%a %_d %b %Y - %r'
+
+if [[ $BLOCK_BUTTON == "1" ]]; then
+	gsimplecal
+fi
