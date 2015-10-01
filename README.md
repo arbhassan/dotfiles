@@ -1,1 +1,1 @@
-# Dotfiles for i3 and Vim
+Dotfiles for i3 and Vim
