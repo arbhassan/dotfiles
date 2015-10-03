@@ -26,52 +26,28 @@ font pango:monospace 8
 # X core fonts rendering does not support right-to-left and this being a bitmap
 # font, it doesn’t scale on retina/hidpi displays.
 
-set $gsi         10
-set $gso         0
-set $bordersize  2
-set $background  #1d2021
-set $foreground  #ebdbb2
-set $black       #282828
-set $darkgrey    #928374
-set $darkred     #cc241d
-set $red         #fb4934
-set $darkgreen   #98971a
-set $green       #b8bb26
-set $darkyellow  #d79921
-set $yellow      #fabd2f
-set $darkblue    #458588
-set $blue        #83a598
-set $darkmagenta #b16286
-set $magenta     #d3869b
-set $darkcyan    #689d6a
-set $cyan        #8ec07c
-set $lightgrey   #a89984
-set $white       #ebdbb2
+
 
 #######################################################################
 #                               colors                                #
 #######################################################################
 
-client.focused          $foreground $foreground $background $foreground
-client.focused_inactive $darkgrey $darkgrey $foreground $darkgrey
-client.unfocused        $darkgrey $darkgrey $foreground $darkgrey
-client.urgent           $red $red $background $red
+# class                 border  backgr. text    indicator
+client.focused          #676d3d #676d3d #ebdbb2 #676d3d
+client.unfocused        #323232 #323232 #ebdbb2 #323232
+client.focused_inactive #323232 #333333 #ebdbb2 #323232
+client.urgent           #383a3b #383a3b #ee0000 #383a3b
 
 #######################################################################
 #                               borders                               #
 #######################################################################
 
-hide_edge_borders       none
-gaps                    inner $gsi
-gaps                    outer $gso
-new_float               pixel $bordersize
-new_window              pixel $bordersize
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
 exec nitrogen --restore
-# exec "compton -CGbz -r 8 -o 0.2 -l -12 -t -12 --backend glx --vsync opengl --shadow-exclude 'argb && _NET_WM_OPAQUE_REGION@:c'"
+exec compton -b --config ~/.compton2.conf
 
 # start a terminal
 bindsym $mod+Return exec xfce4-terminal
@@ -84,6 +60,8 @@ bindsym $mod+o exec xfce4-appfinder
 
 # kill focused window
 bindsym $mod+Shift+q kill
+
+# bindsym $mod+q exec "~/.i3/blocks/lock.sh"
 
 # start dmenu (a program launcher)
 bindsym $mod+d exec dmenu_run
@@ -202,6 +180,29 @@ bindsym $mod+r mode "resize"
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 
+# Power control mode
+set $power_control "[l]ock log[o]ut [s]uspend [h]ibernate [r]eboot [p]oweroff"
+mode  $power_control {
+    bindsym l exec ~/.i3/lock.sh; mode "default"
+    bindsym o exec i3-msg exit; mode "default"
+    bindsym s exec systemctl suspend; mode "default"
+    bindsym h exec systemctl hibernate; mode "default"
+    bindsym r exec systemctl reboot; mode "default"
+    bindsym p exec systemctl poweroff; mode "default"
+
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+n mode $power_control
+
+# Borders
+for_window [class="^.*"] border pixel 2
+
+# Gaps
+gaps inner 12
+smart_borders no_gaps
+
+
 
 #######################################################################
 #                                 bar                                 #
@@ -214,14 +215,15 @@ bar {
 	font pango: FontAwesome 9
 	position top
     colors {
-        background $background
-        statusline $foreground
-        separator $darkgrey
+        background #282828
+        statusline #ebdbb2
+        separator  #756d59
 
-        focused_workspace  $background $background $foreground
-        active_workspace   $background $background $foreground
-        inactive_workspace $background $background $darkgrey
-        urgent_workspace   $background $background $red
+                           #border backgr. text
+        focused_workspace  #676d3d #676d3d #ebdbb2
+        active_workspace   #323232 #5f676a #ebdbb2
+        inactive_workspace #323232 #323232 #888888
+        urgent_workspace   #333333 #900000 #ffffff
     }
 }
 #Assignments
@@ -229,6 +231,7 @@ for_window [class="Vlc"] floating enable
 for_window [class="Xfce4-appfinder"] floating enable
 for_window [class="Xarchiver"] floating enable
 for_window [class="Orage"] floating enable
-
+for_window [class="mpv"] floating enable
+for_window [class="urxvt"] floating enable
 
 # Autostart programs
