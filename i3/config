@@ -50,7 +50,7 @@ exec nitrogen --restore
 exec compton -b --config ~/.compton2.conf
 
 # start a terminal
-bindsym $mod+Return exec xfce4-terminal
+bindsym $mod+Return exec urxvt
 
 # start thunar
 bindsym $mod+f exec thunar
